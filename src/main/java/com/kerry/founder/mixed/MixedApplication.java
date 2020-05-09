@@ -6,6 +6,8 @@ import com.kerry.founder.mixed.service.MixedUserService;
 import org.apache.commons.lang3.RandomUtils;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import java.math.BigDecimal;
+
 /**
  * **********书山有路勤为径**********
  *
@@ -24,6 +26,9 @@ public class MixedApplication {
 
         MixedUserService anotherService = (MixedUserService) context.getBean("anotherService");
         anotherService.introduction();
+
+        BigDecimal bigDecimal = new BigDecimal(0);
+        System.out.println(bigDecimal.equals(BigDecimal.ZERO));
     }
 
 }
