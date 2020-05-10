@@ -9,7 +9,16 @@ public interface UserService {
     /**
      * say hello
      * @param name
+     * @throws Exception
      */
-    void sayHello(String name);
+    void sayHello(String name) throws Exception;
+
+    /**
+     * info
+     * @param name
+     * @return
+     * @throws Exception
+     */
+    String info(String name) throws Exception;
 
 }

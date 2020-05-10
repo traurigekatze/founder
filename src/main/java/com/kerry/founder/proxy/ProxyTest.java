@@ -12,21 +12,21 @@ import com.kerry.founder.proxy.service.WillBeServiceImpl;
  */
 public class ProxyTest {
 
-    public static void main(String[] args) {
-        // step1：simple say hello
-        UserService userService = new UserServiceImpl();
-        userService.sayHello("kerry");
-        System.out.println();
-
-        // step2：say hello before add "will be say hello..."
-        UserService willBeService = new WillBeServiceImpl(userService);
-        willBeService.sayHello("kerry");
-        System.out.println();
-
-        // step3：basic step2，say hello after add "nice to meet you..."
-        UserService niceService = new NiceServiceImpl(willBeService);
-        niceService.sayHello("kerry");
-        System.out.println();
+    public static void main(String[] args) throws Exception {
+//        // step1：simple say hello
+//        UserService userService = new UserServiceImpl();
+//        userService.sayHello("kerry");
+//        System.out.println();
+//
+//        // step2：say hello before add "will be say hello..."
+//        UserService willBeService = new WillBeServiceImpl(userService);
+//        willBeService.sayHello("kerry");
+//        System.out.println();
+//
+//        // step3：basic step2，say hello after add "nice to meet you..."
+//        UserService niceService = new NiceServiceImpl(willBeService);
+//        niceService.sayHello("kerry");
+//        System.out.println();
 
         /**
          * 结论：
@@ -38,7 +38,9 @@ public class ProxyTest {
          *
          * step4：通过 proxy factory 动态生成 代理对象，程序中不需要新建类
          */
-        UserService newInstance = (UserService) ProxyFactory.newInstance(new WillBeServiceImpl(new UserServiceImpl()));
+        UserService newInstance = (UserService) ProxyFactory.newInstance(new UserServiceImpl());
         newInstance.sayHello("kerry");
+        System.out.println();
+        System.out.println(newInstance.info("kerry"));
     }
 }

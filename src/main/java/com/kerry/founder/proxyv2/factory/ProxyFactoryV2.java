@@ -1,8 +1,9 @@
-package com.kerry.founder.proxy.factory;
+package com.kerry.founder.proxyv2.factory;
 
 import com.kerry.founder.proxy.service.UserService;
 import com.kerry.founder.proxy.service.UserServiceImpl;
-import com.kerry.founder.proxy.service.WillBeServiceImpl;
+import com.kerry.founder.proxyv2.handler.CustomInvocationHandler;
+import com.kerry.founder.proxyv2.handler.MyInvocationHandler;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.tools.JavaCompiler;
@@ -12,7 +13,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
 import java.net.URL;
 import java.net.URLClassLoader;
 
@@ -20,20 +20,22 @@ import java.net.URLClassLoader;
  * @author kerryhe
  * @date 2020/5/9
  */
-public class ProxyFactory {
+public class ProxyFactoryV2 {
 
-    public static Object newInstance(Object target) {
+    public static Object newInstance(Class targetInf, MyInvocationHandler handler) {
         Object proxyBean = null;
         String tab = "\t";
         String line = "\n";
-        Class targetInf = target.getClass().getInterfaces()[0];
+        Class handlerClass = handler.getClass();
         StringBuilder packageLine = new StringBuilder("package com.kerry.proxy;").append(line);
-        StringBuilder importLine = new StringBuilder("import ").append(targetInf.getName()).append(";").append(line);
+        StringBuilder importLine = new StringBuilder("import com.kerry.founder.proxyv2.handler.MyInvocationHandler;").append(line)
+                .append("import java.lang.Exception;").append(line)
+                .append("import java.lang.reflect.Method;").append(line);
         StringBuilder classLine = new StringBuilder("public class $Proxy implements ").append(targetInf.getSimpleName()).append(" {").append(line);
-        StringBuilder fieldLine = new StringBuilder(tab).append("private ").append(targetInf.getSimpleName()).append(" target;").append(line);
+        StringBuilder fieldLine = new StringBuilder(tab).append("private MyInvocationHandler handler;").append(line);
 
-        StringBuilder constructorLine = new StringBuilder(tab).append("public $Proxy(").append(targetInf.getSimpleName()).append(" target) {").append(line)
-                .append(tab).append(tab).append("this.target = target;").append(line).append(tab).append("}").append(line);
+        StringBuilder constructorLine = new StringBuilder(tab).append("public $Proxy(MyInvocationHandler handler) {").append(line)
+                .append(tab).append(tab).append("this.handler = handler;").append(line).append(tab).append("}").append(line);
 
 
         StringBuilder methodLine = new StringBuilder();
@@ -57,19 +59,21 @@ public class ProxyFactory {
                     parameterLine = parameterLine.replace(parameterLine.lastIndexOf(","), parameterLine.length()+1, "");
                     argsLine = argsLine.replace(argsLine.lastIndexOf(","), argsLine.length() + 1, "");
                 }
-                String rt = "";
+                methodLine.append(tab).append("public ").append(rtType).append(" ").append(methodName).append("(").append(parameterLine).append(") throws Exception {").append(line)
+                        .append(tab).append(tab).append("Method method = Class.forName(\"").append(targetInf.getName()).append("\").getDeclaredMethod(\"").append(methodName).append("\");").append(line)
+                        .append(tab).append(tab);
+
+//                .append(rt)
                 if (!"void".equals(rtType)) {
-                    rt = "return ";
+                    methodLine.append("return (").append(rtType).append(")");
                 }
-                methodLine.append(tab).append("public ").append(rtType).append(" ").append(methodName).append("(").append(parameterLine).append(") {").append(line)
-                        .append(tab).append(tab).append("System.out.println(\"this is proxy,nice to meet you...\");").append(line)
-                        .append(tab).append(tab).append(rt).append("target.").append(methodName).append("(").append(argsLine).append(");").append(line)
+                methodLine.append("handler.invoke(method, ").append(argsLine).append(");").append(line)
                         .append(tab).append("}").append(line);
             }
         }
         StringBuilder content = new StringBuilder();
         content.append(packageLine).append(importLine).append(classLine).append(fieldLine).append(constructorLine).append(methodLine).append("}");
-
+        System.out.println(content);
 //        File file =new File("/Users/kerryhe/mine/private/com/kerry/proxy/$Proxy.java");
         File file =new File("E:\\com\\kerry\\proxy\\$Proxy.java");
         try {
@@ -95,9 +99,8 @@ public class ProxyFactory {
             URLClassLoader urlClassLoader = new URLClassLoader(urls);
             Class clazz = urlClassLoader.loadClass("com.kerry.proxy.$Proxy");
 
-            Constructor constructor = clazz.getConstructor(targetInf);
-
-            proxyBean = constructor.newInstance(target);
+            Constructor constructor = clazz.getConstructor(MyInvocationHandler.class);
+            proxyBean = constructor.newInstance(handler);
         } catch (Exception e) {
             e.printStackTrace();
         }

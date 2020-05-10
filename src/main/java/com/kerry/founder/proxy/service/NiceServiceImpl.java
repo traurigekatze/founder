@@ -13,8 +13,14 @@ public class NiceServiceImpl implements UserService {
     }
 
     @Override
-    public void sayHello(String name) {
+    public void sayHello(String name) throws Exception {
         userService.sayHello("kerry");
         System.out.println("nice to meet you...");
+    }
+
+    @Override
+    public String info(String name) throws Exception {
+        System.out.println("nice info...");
+        return "nice " + name;
     }
 }
