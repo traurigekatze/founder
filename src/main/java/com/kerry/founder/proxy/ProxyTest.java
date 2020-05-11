@@ -39,7 +39,7 @@ public class ProxyTest {
          * step4：通过 proxy factory 动态生成 代理对象，程序中不需要新建类
          */
         UserService newInstance = (UserService) ProxyFactory.newInstance(new UserServiceImpl());
-        newInstance.sayHello("kerry");
+        newInstance.sayHello("kerry", 11);
         System.out.println();
         System.out.println(newInstance.info("kerry"));
     }

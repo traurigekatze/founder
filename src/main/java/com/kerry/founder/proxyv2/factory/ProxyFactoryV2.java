@@ -1,8 +1,5 @@
 package com.kerry.founder.proxyv2.factory;
 
-import com.kerry.founder.proxy.service.UserService;
-import com.kerry.founder.proxy.service.UserServiceImpl;
-import com.kerry.founder.proxyv2.handler.CustomInvocationHandler;
 import com.kerry.founder.proxyv2.handler.MyInvocationHandler;
 import org.apache.commons.lang3.StringUtils;
 
@@ -22,13 +19,15 @@ import java.net.URLClassLoader;
  */
 public class ProxyFactoryV2 {
 
+    private ProxyFactoryV2() { }
+
     public static Object newInstance(Class targetInf, MyInvocationHandler handler) {
         Object proxyBean = null;
         String tab = "\t";
         String line = "\n";
-        Class handlerClass = handler.getClass();
-        StringBuilder packageLine = new StringBuilder("package com.kerry.proxy;").append(line);
+        StringBuilder packageLine = new StringBuilder("package com.kerry.proxyv2;").append(line);
         StringBuilder importLine = new StringBuilder("import com.kerry.founder.proxyv2.handler.MyInvocationHandler;").append(line)
+                .append("import ").append(targetInf.getName()).append(";").append(line)
                 .append("import java.lang.Exception;").append(line)
                 .append("import java.lang.reflect.Method;").append(line);
         StringBuilder classLine = new StringBuilder("public class $Proxy implements ").append(targetInf.getSimpleName()).append(" {").append(line);
@@ -47,35 +46,36 @@ public class ProxyFactoryV2 {
                 String rtType = method.getReturnType().getSimpleName();
                 StringBuilder parameterLine = new StringBuilder();
                 Class[] args = method.getParameterTypes();
-                StringBuilder argsLine = new StringBuilder();
+                StringBuilder argsLine = new StringBuilder(", new Object[]{");
+                StringBuilder params = new StringBuilder();
                 if (args != null) {
                     for (int j = 0; j < args.length; j++) {
                         Class arg = args[j];
                         parameterLine.append(arg.getSimpleName()).append(" p").append(j).append(", ");
                         argsLine.append("p").append(j).append(", ");
+                        params.append(", ").append(arg.getSimpleName()).append(".class");
                     }
                 }
                 if (StringUtils.isNotBlank(parameterLine)) {
                     parameterLine = parameterLine.replace(parameterLine.lastIndexOf(","), parameterLine.length()+1, "");
                     argsLine = argsLine.replace(argsLine.lastIndexOf(","), argsLine.length() + 1, "");
                 }
+                argsLine.append("}");
                 methodLine.append(tab).append("public ").append(rtType).append(" ").append(methodName).append("(").append(parameterLine).append(") throws Exception {").append(line)
-                        .append(tab).append(tab).append("Method method = Class.forName(\"").append(targetInf.getName()).append("\").getDeclaredMethod(\"").append(methodName).append("\");").append(line)
+                        .append(tab).append(tab).append("Method method = Class.forName(\"").append(targetInf.getName()).append("\").getDeclaredMethod(\"").append(methodName)
+                        .append("\"").append(params).append(");").append(line)
                         .append(tab).append(tab);
-
-//                .append(rt)
                 if (!"void".equals(rtType)) {
                     methodLine.append("return (").append(rtType).append(")");
                 }
-                methodLine.append("handler.invoke(method, ").append(argsLine).append(");").append(line)
+                methodLine.append("handler.invoke(method").append(argsLine).append(");").append(line)
                         .append(tab).append("}").append(line);
             }
         }
         StringBuilder content = new StringBuilder();
         content.append(packageLine).append(importLine).append(classLine).append(fieldLine).append(constructorLine).append(methodLine).append("}");
-        System.out.println(content);
-//        File file =new File("/Users/kerryhe/mine/private/com/kerry/proxy/$Proxy.java");
-        File file =new File("E:\\com\\kerry\\proxy\\$Proxy.java");
+        File file =new File("/Users/kerryhe/mine/private/com/kerry/proxyv2/$Proxy.java");
+//        File file =new File("E:\\com\\kerry\\proxy\\$Proxy.java");
         try {
             if (!file.exists()) {
                 file.createNewFile();
@@ -94,10 +94,10 @@ public class ProxyFactoryV2 {
             t.call();
             fileMgr.close();
 
-//            URL[] urls = new URL[]{new URL("file:/Users/kerryhe/mine/private/")};
-            URL[] urls = new URL[]{new URL("file:E:\\\\")};
+            URL[] urls = new URL[]{new URL("file:/Users/kerryhe/mine/private/")};
+//            URL[] urls = new URL[]{new URL("file:E:\\\\")};
             URLClassLoader urlClassLoader = new URLClassLoader(urls);
-            Class clazz = urlClassLoader.loadClass("com.kerry.proxy.$Proxy");
+            Class clazz = urlClassLoader.loadClass("com.kerry.proxyv2.$Proxy");
 
             Constructor constructor = clazz.getConstructor(MyInvocationHandler.class);
             proxyBean = constructor.newInstance(handler);

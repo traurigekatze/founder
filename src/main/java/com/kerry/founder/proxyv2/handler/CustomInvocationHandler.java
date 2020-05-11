@@ -18,7 +18,9 @@ public class CustomInvocationHandler implements MyInvocationHandler {
     @Override
     public Object invoke(Method method, Object[] args) throws Exception {
         System.out.println("is custom invocation handler...");
-        return method.invoke(target, args);
+        Object result = method.invoke(target, args);
+        System.out.println("custom invocation handler is over...");
+        return result;
     }
 
 }

@@ -25,5 +25,13 @@ public class ProxyV2Test {
         UserService userService = (UserService) ProxyFactoryV2.newInstance(UserService.class, new CustomInvocationHandler(new UserServiceImpl()));
         userService.info("kerry");
 
+        System.out.println();
+
+        userService.sayHello("kerry", 1);
+
+        System.out.println();
+
+        userService.play();
+
     }
 }

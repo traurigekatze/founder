@@ -9,9 +9,10 @@ public interface UserService {
     /**
      * say hello
      * @param name
+     * @param age
      * @throws Exception
      */
-    void sayHello(String name) throws Exception;
+    void sayHello(String name, Integer age) throws Exception;
 
     /**
      * info
@@ -20,5 +21,11 @@ public interface UserService {
      * @throws Exception
      */
     String info(String name) throws Exception;
+
+    /**
+     * play
+     * @throws Exception
+     */
+    void play() throws Exception;
 
 }
