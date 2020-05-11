@@ -1,12 +1,9 @@
 package com.kerry.founder.proxyv2;
 
 import com.kerry.founder.proxy.service.UserService;
-import com.kerry.founder.proxy.service.UserServiceImpl;
+import com.kerry.founder.proxy.service.impl.UserServiceImpl;
 import com.kerry.founder.proxyv2.factory.ProxyFactoryV2;
 import com.kerry.founder.proxyv2.handler.CustomInvocationHandler;
-import com.kerry.founder.proxyv2.handler.ProxyHandler;
-
-import java.lang.reflect.Proxy;
 
 /**
  * **********书山有路勤为径**********
@@ -22,7 +19,7 @@ public class ProxyV2Test {
 //                new Class[]{UserService.class}, new ProxyHandler(new UserServiceImpl()));
 //        instance.info("kerry");
 
-        UserService userService = (UserService) ProxyFactoryV2.newInstance(UserService.class, new CustomInvocationHandler(new UserServiceImpl()));
+        UserService userService = (UserService) ProxyFactoryV2.newInstance(UserService.class, new CustomInvocationHandler(new UserServiceImpl(), "com.kerry.founder.proxyv2.aspect"));
         userService.info("kerry");
 
         System.out.println();

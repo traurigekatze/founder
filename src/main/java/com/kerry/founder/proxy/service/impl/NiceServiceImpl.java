@@ -1,4 +1,6 @@
-package com.kerry.founder.proxy.service;
+package com.kerry.founder.proxy.service.impl;
+
+import com.kerry.founder.proxy.service.UserService;
 
 /**
  * @author kerryhe

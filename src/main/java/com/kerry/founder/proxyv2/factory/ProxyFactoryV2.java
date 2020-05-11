@@ -74,8 +74,8 @@ public class ProxyFactoryV2 {
         }
         StringBuilder content = new StringBuilder();
         content.append(packageLine).append(importLine).append(classLine).append(fieldLine).append(constructorLine).append(methodLine).append("}");
-        File file =new File("/Users/kerryhe/mine/private/com/kerry/proxyv2/$Proxy.java");
-//        File file =new File("E:\\com\\kerry\\proxy\\$Proxy.java");
+//        File file =new File("/Users/kerryhe/mine/private/com/kerry/proxyv2/$Proxy.java");
+        File file =new File("E:\\com\\kerry\\proxyv2\\$Proxy.java");
         try {
             if (!file.exists()) {
                 file.createNewFile();
@@ -94,8 +94,8 @@ public class ProxyFactoryV2 {
             t.call();
             fileMgr.close();
 
-            URL[] urls = new URL[]{new URL("file:/Users/kerryhe/mine/private/")};
-//            URL[] urls = new URL[]{new URL("file:E:\\\\")};
+//            URL[] urls = new URL[]{new URL("file:/Users/kerryhe/mine/private/")};
+            URL[] urls = new URL[]{new URL("file:E:\\\\")};
             URLClassLoader urlClassLoader = new URLClassLoader(urls);
             Class clazz = urlClassLoader.loadClass("com.kerry.proxyv2.$Proxy");
 

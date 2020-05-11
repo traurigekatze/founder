@@ -1,8 +1,5 @@
 package com.kerry.founder.proxy.factory;
 
-import com.kerry.founder.proxy.service.UserService;
-import com.kerry.founder.proxy.service.UserServiceImpl;
-import com.kerry.founder.proxy.service.WillBeServiceImpl;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.tools.JavaCompiler;
@@ -12,7 +9,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
 import java.net.URL;
 import java.net.URLClassLoader;
 

@@ -1,10 +1,8 @@
 package com.kerry.founder.proxy;
 
 import com.kerry.founder.proxy.factory.ProxyFactory;
-import com.kerry.founder.proxy.service.NiceServiceImpl;
 import com.kerry.founder.proxy.service.UserService;
-import com.kerry.founder.proxy.service.UserServiceImpl;
-import com.kerry.founder.proxy.service.WillBeServiceImpl;
+import com.kerry.founder.proxy.service.impl.UserServiceImpl;
 
 /**
  * @author kerryhe
