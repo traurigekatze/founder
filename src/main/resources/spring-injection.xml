@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ 1、支持自动注入：default-autowire=byName/byType
+ 2、支持 setter、constructor 两种注入方式
+ -->
+<beans default-autowire = "byName">
+
+    <bean id="injectionDao1" class="com.kerry.founder.injection.dao.InjectionDao1" />
+
+    <bean id="injectionDao2" class="com.kerry.founder.injection.dao.InjectionDao2" />
+
+    <bean id="injectionService" class="com.kerry.founder.injection.service.impl.InjectionServiceImpl" >
+<!--        <constructor-arg name="injectionDao" ref="injectionDao" />-->
+<!--        <property name="name" value="abc"/>-->
+    </bean>
+
+</beans>

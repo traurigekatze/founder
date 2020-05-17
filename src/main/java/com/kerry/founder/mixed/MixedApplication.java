@@ -1,8 +1,9 @@
 package com.kerry.founder.mixed;
 
 import com.kerry.founder.mixed.config.MixedAppConfig;
-import com.kerry.founder.mixed.service.AnotherService;
 import com.kerry.founder.mixed.service.MixedUserService;
+import com.kerry.founder.mixed.service.TestServiceA;
+import com.kerry.founder.mixed.service.TestServiceB;
 import org.apache.commons.lang3.RandomUtils;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -21,6 +22,13 @@ public class MixedApplication {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
         context.register(MixedAppConfig.class);
         context.refresh();
+
+        TestServiceA testServiceA = context.getBean("testServiceA", TestServiceA.class);
+        testServiceA.doAction();
+
+        TestServiceB testServiceB = context.getBean("testServiceB", TestServiceB.class);
+        testServiceB.doAction();
+
         MixedUserService userService = context.getBean("mixedUserService", MixedUserService.class);
         userService.info(RandomUtils.nextInt(1, 999));
 

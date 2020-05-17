@@ -6,7 +6,13 @@
         http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/aop https://www.springframework.org/schema/aop/spring-aop.xsd">
 
-    <bean id="mixedUserDao" class="com.kerry.founder.mixed.dao.MixedUserDao" />
+    <bean id="userDao2" class="com.kerry.founder.mixed.dao.MixedUserDao2" />
+
+    <bean id="mixedUserDao" class="com.kerry.founder.mixed.dao.MixedUserDao" >
+        <constructor-arg name="b" value="abc" />
+        <constructor-arg name="a" value="123"/>
+        <property name="userDao2" ref="userDao2"/>
+    </bean>
 
     <bean id="aspect" class="com.kerry.founder.mixed.aspect.MixedAspect" />
     <aop:aspectj-autoproxy />
